@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { getTestBed } from '@angular/core/testing';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 
 import { MessageService } from '../../messages/message.service';
 
@@ -9,14 +11,24 @@ import { ProductService } from '../product.service';
   templateUrl: './product-edit.component.html',
   styleUrls: ['./product-edit.component.css']
 })
-export class ProductEditComponent {
+export class ProductEditComponent implements OnInit{
   pageTitle = 'Product Edit';
   errorMessage: string;
 
   product: Product;
 
   constructor(private productService: ProductService,
-              private messageService: MessageService) { }
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private messageService: MessageService) { }
+  ngOnInit(): void {
+    this.activatedRoute.paramMap.subscribe((params: Params)=>{
+      let id = +params.get('id');
+      this.getProduct(id);
+    });
+    // let id = +this.activatedRoute.snapshot.params['id'];
+    // this.getProduct(id);
+  }
 
   getProduct(id: number): void {
     this.productService.getProduct(id).subscribe({
@@ -50,7 +62,7 @@ export class ProductEditComponent {
           error: err => this.errorMessage = err
         });
       }
-    }
+    };
   }
 
   saveProduct(): void {
@@ -77,5 +89,6 @@ export class ProductEditComponent {
     }
 
     // Navigate back to the product list
+    this.router.navigate(['/products']);
   }
 }
