@@ -1,3 +1,5 @@
+import { getTestBed } from '@angular/core/testing';
+import { AuthGuard } from './../user/auth.guard';
 import { ProductData } from './product-data';
 import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
@@ -9,7 +11,6 @@ import { ProductEditInfoComponent } from './product-edit/product-edit-info.compo
 import { ProductEditTagsComponent } from './product-edit/product-edit-tags.component';
 import { ProductResolver } from './product-resolver.service';
 
-
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
@@ -18,6 +19,7 @@ import { SharedModule } from '../shared/shared.module';
     RouterModule.forChild([
       {
         path: 'products',
+        canActivate: [AuthGuard],
         children: [
           {
             path:'',
