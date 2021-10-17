@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { slideInAnimation } from './app.animation';
 
 import { AuthService } from './user/auth.service';
+import { MessageService } from './messages/message.service';
 
 @Component({
   selector: 'pm-root',
@@ -25,8 +26,13 @@ export class AppComponent {
     return '';
   }
 
+  get isMessageDisplayed(): boolean{
+    return this.messageService.isDisplayed;
+  }
+
   constructor(
     private authService: AuthService,
+    private messageService: MessageService,
     private router: Router) {
     router.events.subscribe((routerEvent: Event) => {
       this.checkRuterEvent(routerEvent);
@@ -52,11 +58,17 @@ export class AppComponent {
     console.log('Log out');
   }
 
-  showMessages() {
+  displayMessages(): void {
     this.router.navigate([{ outlets: { popup: ['messages'] } }]);
+    this.messageService.isDisplayed = true;
   }
 
-  navigateToWelcome() {
+  hideMessages(): void {
+    this.router.navigate([{ outlets: { popup: ['messages'] } }]);
+    this.messageService.isDisplayed = false;
+  }
+
+  navigateToWelcome(): void {
     // the secondary route does not work ere
     //this.router.navigate(['/welcome', { outlets: { popup: ['messages'] } }]);
 
