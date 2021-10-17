@@ -52,6 +52,11 @@ export class AppComponent {
     console.log('Log out');
   }
   showMessages() {
-    this.router.navigate([{outlets:{popup:['messages']}}]);
+    this.router.navigate([{ outlets: { popup: ['messages'] } }]);
+  }
+
+  navigateToProducts() {
+    // the secondary route does not work ere
+    this.router.navigate(['/products', { outlets: { popup: ['messages'] } }]);
   }
 }
