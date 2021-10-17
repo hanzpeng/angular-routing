@@ -4,13 +4,13 @@
   <a class="navbar-brand">{{pageTitle}}</a>
   <ul class="navbar-nav">
     <li class="nav-item"
-        [routerLink]="['/welcome']"
+        [routerLink]="[{ outlets: { primary: ['welcome'], popup: ['messages'] } }]"
         routerLinkActive="active">
       <a class="nav-link">Home</a>
     </li>
     <li class="nav-item">
       <a class="nav-link"
-         [routerLink]="['/products', { outlets: { popup: ['messages'] } }]"
+         [routerLink]="['/products']"
          routerLinkActive="active"
          [routerLinkActiveOptions]="{exact:true}">Product List</a>
     </li>

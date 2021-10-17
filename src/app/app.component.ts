@@ -51,12 +51,20 @@ export class AppComponent {
     this.router.navigateByUrl('/welcome');
     console.log('Log out');
   }
+
   showMessages() {
     this.router.navigate([{ outlets: { popup: ['messages'] } }]);
   }
 
-  navigateToProducts() {
+  navigateToWelcome() {
     // the secondary route does not work ere
-    this.router.navigate(['/products', { outlets: { popup: ['messages'] } }]);
+    //this.router.navigate(['/welcome', { outlets: { popup: ['messages'] } }]);
+
+    this.router.navigate([{
+      outlets: {
+        primary: ['welcome'],  // no slash before welcome
+        popup: ['messages']
+      }
+    }]);
   }
 }
