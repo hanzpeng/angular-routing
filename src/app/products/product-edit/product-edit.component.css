@@ -70,6 +70,6 @@
 }
 
     /* Adds the right arrow after the tab */
-.wizard .active:after {
+.wizard .active::after {
     border-left-color: #007ACC;
 }
