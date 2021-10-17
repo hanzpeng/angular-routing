@@ -4,14 +4,14 @@ import { Component, OnInit } from '@angular/core';
 
 import { MessageService } from '../../messages/message.service';
 
-import { Product } from '../product';
+import { Product, ProductResolved } from '../product';
 import { ProductService } from '../product.service';
 
 @Component({
   templateUrl: './product-edit.component.html',
   styleUrls: ['./product-edit.component.css']
 })
-export class ProductEditComponent implements OnInit{
+export class ProductEditComponent implements OnInit {
   pageTitle = 'Product Edit';
   errorMessage: string;
 
@@ -28,6 +28,12 @@ export class ProductEditComponent implements OnInit{
     });
     // let id = +this.activatedRoute.snapshot.params['id'];
     // this.getProduct(id);
+
+    this.activatedRoute.data.subscribe(data => {
+      const resolvedData: ProductResolved = data['resolvedData'];
+      this.errorMessage = resolvedData.error;
+      this.onProductRetrieved(resolvedData.product);
+    });
   }
 
   getProduct(id: number): void {
