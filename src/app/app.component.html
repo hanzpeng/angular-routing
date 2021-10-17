@@ -1,4 +1,5 @@
-<span class = "fa fa-spinner spinner" *ngIf="loading"></span>
+<span class="fa fa-spinner spinner"
+      *ngIf="loading"></span>
 <nav class="navbar navbar-expand navbar-light bg-light">
   <a class="navbar-brand">{{pageTitle}}</a>
   <ul class="navbar-nav">
@@ -25,7 +26,9 @@
       <a class="nav-link">Welcome {{ userName }}</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link">Show Messages</a>
+      <a class="nav-link"
+      (click)="showMessages()">
+      Show Messages</a>
     </li>
     <li class="nav-item"
         *ngIf="!isLoggedIn">
@@ -41,5 +44,12 @@
 </nav>
 <div class="container"
      [@slideInAnimation]="o.isActivated? o.activatedRoute : ''">
-  <router-outlet #o="outlet"></router-outlet>
+     <div class="row">
+       <div class="col-md-10">
+        <router-outlet #o="outlet"></router-outlet>
+       </div>
+       <div class="col-md-2">
+        <router-outlet name="popup"></router-outlet>
+       </div>
+      </div>
 </div>

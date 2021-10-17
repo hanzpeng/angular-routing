@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { WelcomeComponent } from './home/welcome.component';
+import { MessageComponent } from './messages/message.component';
 import { PageNotFoundComponent } from './page-not-found.component';
 
 const ROUTES = [
@@ -10,9 +11,14 @@ const ROUTES = [
   { path: '**', component: PageNotFoundComponent }
 ]
 
+// const ROUTES2 = [
+//   { path: '', component: MessageComponent, outlet:'popup' }
+// ]
+
 @NgModule({
   imports: [
-    RouterModule.forRoot(ROUTES, { enableTracing: true })
+    RouterModule.forRoot(ROUTES, { enableTracing: true }),
+    // RouterModule.forRoot(ROUTES2, { enableTracing: true })
   ],
   exports: [
     RouterModule

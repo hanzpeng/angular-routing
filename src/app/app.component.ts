@@ -41,7 +41,7 @@ export class AppComponent {
     if (routerEvent instanceof NavigationEnd ||
       routerEvent instanceof NavigationCancel ||
       routerEvent instanceof NavigationError) {
-        this.loading = false;
+      this.loading = false;
     }
   }
 
@@ -50,5 +50,8 @@ export class AppComponent {
     // user navigateByUrl instead of navigate to make sure all all exisiting parameter and secondary route are cleaed out the extra are cleared out.
     this.router.navigateByUrl('/welcome');
     console.log('Log out');
+  }
+  showMessages() {
+    this.router.navigate([{outlets:{popup:['messages']}}]);
   }
 }
