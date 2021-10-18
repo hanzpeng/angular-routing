@@ -1,3 +1,4 @@
+import { SelectiveStrategy } from './selective-strategy.service';
 import { AuthGuard } from './user/auth.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, CanActivate, CanLoad, PreloadAllModules } from '@angular/router';
@@ -11,6 +12,7 @@ const ROUTES = [
     path: 'products',
     // canLoad: [AuthGuard],
     canActivate: [AuthGuard],
+    data: { preload: false },
     loadChildren: () =>
       import('./products/product.module').then(m => m.ProductModule)
   },
@@ -25,7 +27,7 @@ const ROUTES = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(ROUTES, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(ROUTES, { preloadingStrategy: SelectiveStrategy })
     // RouterModule.forRoot(ROUTES, { enableTracing: true }),
     // RouterModule.forRoot(ROUTES2, { enableTracing: true })
   ],
