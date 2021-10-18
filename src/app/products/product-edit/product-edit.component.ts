@@ -1,6 +1,5 @@
-import { getTestBed } from '@angular/core/testing';
-import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { MessageService } from '../../messages/message.service';
 
@@ -14,47 +13,50 @@ import { ProductService } from '../product.service';
 export class ProductEditComponent implements OnInit {
   pageTitle = 'Product Edit';
   errorMessage: string;
-   private currentProduct: Product;
-   private originalProduct: Product;
 
-   get product(): Product {
-     return this.currentProduct;
-   }
+  private dataIsValid: { [key: string]: boolean } = {};
 
-   set product(value: Product){
-     this.currentProduct = value;
-     this.originalProduct = {...value};
-   }
+  get isDirty(): boolean {
+    return JSON.stringify(this.originalProduct) !== JSON.stringify(this.currentProduct);
+  }
 
-   get isDirty():boolean{
-     return JSON.stringify(this.originalProduct) != JSON.stringify(this.currentProduct);
-   }
+  private currentProduct: Product;
+  private originalProduct: Product;
+
+  get product(): Product {
+    return this.currentProduct;
+  }
+  set product(value: Product) {
+    this.currentProduct = value;
+    // Clone the object to retain a copy
+    this.originalProduct = value ? { ...value } : null;
+  }
 
   constructor(private productService: ProductService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private messageService: MessageService) { }
+              private messageService: MessageService,
+              private route: ActivatedRoute,
+              private router: Router) { }
+
   ngOnInit(): void {
-    // this.activatedRoute.paramMap.subscribe((params: Params)=>{
+    // this.route.paramMap.subscribe((params: Params)=>{
     //   let id = +params.get('id');
     //   this.getProduct(id);
     // });
-    // let id = +this.activatedRoute.snapshot.params['id'];
+    // let id = +this.route.snapshot.params['id'];
     // this.getProduct(id);
-
-    this.activatedRoute.data.subscribe(data => {
+    this.route.data.subscribe(data => {
       const resolvedData: ProductResolved = data['resolvedData'];
       this.errorMessage = resolvedData.error;
       this.onProductRetrieved(resolvedData.product);
     });
   }
 
-  getProduct(id: number): void {
-    this.productService.getProduct(id).subscribe({
-      next: product => this.onProductRetrieved(product),
-      error: err => this.errorMessage = err
-    });
-  }
+  // getProduct(id: number): void {
+  //   this.productService.getProduct(id).subscribe({
+  //     next: product => this.onProductRetrieved(product),
+  //     error: err => this.errorMessage = err
+  //   });
+  // }
 
   onProductRetrieved(product: Product): void {
     this.product = product;
@@ -81,17 +83,27 @@ export class ProductEditComponent implements OnInit {
           error: err => this.errorMessage = err
         });
       }
-    };
+    }
   }
 
-  reset():void{
-    // this.dataIsValid = null;
+  isValid(path?: string): boolean {
+    return true;
+    // this.validate();
+    // if (path) {
+    //   return this.dataIsValid[path];
+    // }
+    // return (this.dataIsValid &&
+    //   Object.keys(this.dataIsValid).every(d => this.dataIsValid[d] === true));
+  }
+
+  reset(): void {
+    this.dataIsValid = null;
     this.currentProduct = null;
     this.originalProduct = null;
   }
 
   saveProduct(): void {
-    if (true === true) {
+    if (this.isValid()) {
       if (this.product.id === 0) {
         this.productService.createProduct(this.product).subscribe({
           next: () => this.onSaveComplete(`The new ${this.product.productName} was saved`),
@@ -118,7 +130,26 @@ export class ProductEditComponent implements OnInit {
     this.router.navigate(['/products']);
   }
 
-  isValid(path?: string): boolean {
-    return true;
-  }
+  // validate(): void {
+  //   // Clear the validation object
+  //   this.dataIsValid = {};
+
+  //   // 'info' tab
+  //   if (this.product.productName &&
+  //     this.product.productName.length >= 3 &&
+  //     this.product.productCode) {
+  //     this.dataIsValid['info'] = true;
+  //   } else {
+  //     this.dataIsValid['info'] = false;
+  //   }
+
+  //   // 'tags' tab
+  //   if (this.product.category &&
+  //     this.product.category.length >= 3) {
+  //     this.dataIsValid['tags'] = true;
+  //   } else {
+  //     this.dataIsValid['tags'] = false;
+  //   }
+  // }
+
 }

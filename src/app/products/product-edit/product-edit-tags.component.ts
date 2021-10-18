@@ -1,23 +1,22 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Product, ProductResolved } from '../product';
+import { Product } from '../product';
 
 @Component({
   templateUrl: './product-edit-tags.component.html'
 })
 export class ProductEditTagsComponent implements OnInit {
   errorMessage: string;
-  newTags: string = '';
+  newTags = '';
   product: Product;
 
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.route.parent.data.subscribe(data => {
-      let resolvedData: ProductResolved = data['resolvedData'];
-      this.errorMessage = resolvedData.error;
-      this.product = resolvedData.product;
+      this.product = data['resolvedData'].product;
+      this.errorMessage = data['resolvedData'].error;
     });
   }
 

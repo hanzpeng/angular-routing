@@ -1,8 +1,8 @@
-import { Router, Event, NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router';
 import { Component } from '@angular/core';
-import { slideInAnimation } from './app.animation';
+import { Router, Event, NavigationStart, NavigationEnd, NavigationError, NavigationCancel } from '@angular/router';
 
 import { AuthService } from './user/auth.service';
+import { slideInAnimation } from './app.animation';
 import { MessageService } from './messages/message.service';
 
 @Component({
@@ -19,6 +19,10 @@ export class AppComponent {
     return this.authService.isLoggedIn;
   }
 
+  get isMessageDisplayed(): boolean {
+    return this.messageService.isDisplayed;
+  }
+
   get userName(): string {
     if (this.authService.currentUser) {
       return this.authService.currentUser.userName;
@@ -26,40 +30,31 @@ export class AppComponent {
     return '';
   }
 
-  get isMessageDisplayed(): boolean {
-    return this.messageService.isDisplayed;
-  }
-
-  constructor(
-    private authService: AuthService,
-    private messageService: MessageService,
-    private router: Router) {
+  constructor(private authService: AuthService,
+              private router: Router,
+              private messageService: MessageService) {
     router.events.subscribe((routerEvent: Event) => {
-      this.checkRuterEvent(routerEvent);
+      this.checkRouterEvent(routerEvent);
     });
-
   }
 
-  checkRuterEvent(routerEvent: Event): void {
+  checkRouterEvent(routerEvent: Event): void {
     if (routerEvent instanceof NavigationStart) {
       this.loading = true;
     }
+
     if (routerEvent instanceof NavigationEnd ||
-      routerEvent instanceof NavigationCancel ||
-      routerEvent instanceof NavigationError) {
+        routerEvent instanceof NavigationCancel ||
+        routerEvent instanceof NavigationError) {
       this.loading = false;
     }
   }
 
-  logOut(): void {
-    this.authService.logout();
-    // user navigateByUrl instead of navigate to make sure all all exisiting parameter and secondary route are cleaed out the extra are cleared out.
-    this.router.navigateByUrl('/welcome');
-    console.log('Log out');
-  }
-
   displayMessages(): void {
-    this.router.navigate([{ outlets: { popup: ['messages'] } }]);
+    // Example of primary and secondary routing together
+    // this.router.navigate(['/login', {outlets: { popup: ['messages']}}]); // Does not work
+    // this.router.navigate([{outlets: { primary: ['login'], popup: ['messages']}}]); // Works
+    this.router.navigate([{ outlets: { popup: ['messages'] } }]); // Works
     this.messageService.isDisplayed = true;
   }
 
@@ -68,15 +63,8 @@ export class AppComponent {
     this.messageService.isDisplayed = false;
   }
 
-  navigateToWelcome(): void {
-    // the secondary route does not work ere
-    //this.router.navigate(['/welcome', { outlets: { popup: ['messages'] } }]);
-
-    this.router.navigate([{
-      outlets: {
-        primary: ['welcome'],  // no slash before welcome
-        popup: ['messages']
-      }
-    }]);
+  logOut(): void {
+    this.authService.logout();
+    this.router.navigateByUrl('/welcome');
   }
 }

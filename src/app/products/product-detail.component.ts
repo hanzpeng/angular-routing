@@ -1,5 +1,6 @@
-import { ActivatedRoute, Resolve } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
 import { Product, ProductResolved } from './product';
 
 @Component({
@@ -11,10 +12,11 @@ export class ProductDetailComponent implements OnInit {
   product: Product;
   errorMessage: string;
 
-  constructor(private activatedRoute: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    const resolvedData: ProductResolved = this.activatedRoute.snapshot.data['resolvedData'];
+    const resolvedData: ProductResolved =
+      this.route.snapshot.data['resolvedData'];
     this.errorMessage = resolvedData.error;
     this.onProductRetrieved(resolvedData.product);
   }

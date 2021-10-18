@@ -2,13 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
-import { Product, ProductResolved } from '../product';
+import { Product } from '../product';
 
 @Component({
   templateUrl: './product-edit-info.component.html'
 })
 export class ProductEditInfoComponent implements OnInit {
-  @ViewChild(NgForm, { static: false }) productForm: NgForm;
+  @ViewChild(NgForm) productForm: NgForm;
 
   errorMessage: string;
   product: Product;
@@ -17,12 +17,13 @@ export class ProductEditInfoComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.parent.data.subscribe(data => {
-      if(this.productForm){
+      if (this.productForm) {
         this.productForm.reset();
       }
-      let resolvedData: ProductResolved = data['resolvedData'];
-      this.errorMessage = resolvedData.error;
-      this.product = resolvedData.product;
+
+      this.errorMessage = data['resolvedData'].error;
+      this.product = data['resolvedData'].product;
     });
   }
+
 }
