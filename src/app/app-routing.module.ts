@@ -1,6 +1,6 @@
 import { AuthGuard } from './user/auth.guard';
 import { NgModule } from '@angular/core';
-import { RouterModule, CanActivate } from '@angular/router';
+import { RouterModule, CanActivate, CanLoad } from '@angular/router';
 import { WelcomeComponent } from './home/welcome.component';
 import { MessageComponent } from './messages/message.component';
 import { PageNotFoundComponent } from './page-not-found.component';
@@ -9,7 +9,8 @@ const ROUTES = [
   { path: 'welcome', component: WelcomeComponent },
   {
     path: 'products',
-    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
+    // canActivate: [AuthGuard],
     loadChildren: () =>
       import('./products/product.module').then(m => m.ProductModule)
   },
